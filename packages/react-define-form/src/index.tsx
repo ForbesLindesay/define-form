@@ -8,7 +8,7 @@ import {
   FieldSubscription,
 } from 'define-form';
 
-const {Form, Field} = require('react-final-form');
+const {Form, Field, FormSpy} = require('react-final-form');
 
 export interface RenderableProps<T> {
   children?: ((props: T) => React.ReactNode) | React.ReactNode;
@@ -89,21 +89,51 @@ function createField<FieldValue = string>(): FieldSpec<FieldValue> {
 export class FieldSpec<FieldValue> {
   protected value: FieldValue;
 }
-export default function defineForm<FormData extends AnyObject, ErrorValue>(
-  fields: (
-    createField: <FieldValue = string>() => FieldSpec<FieldValue>,
-  ) => {[FieldName in keyof FormData]: FieldSpec<FormData[FieldName]>},
-): {
+
+// FormSpy
+
+export interface FormSpyRenderProps<FormData, ErrorValue>
+  extends FormState<FormData, ErrorValue>,
+    SubsetFormApi<FormData> {}
+
+export interface FormSpyProps<FormData, ErrorValue>
+  extends RenderableProps<FormSpyRenderProps<FormData, ErrorValue>> {
+  onChange?: (formState: FormState<FormData, ErrorValue>) => void;
+  subscription?: FormSubscription;
+}
+
+export type GetFields<FormData> = (
+  createField: <FieldValue = string>() => FieldSpec<FieldValue>,
+) => {[FieldName in keyof FormData]: FieldSpec<FormData[FieldName]>};
+export type Fields<FormData, ErrorValue> = {
+  readonly [FieldName in keyof FormData]: React.ComponentType<
+    FieldProps<FormData[FieldName], FieldName, FormData, ErrorValue>
+  >
+};
+export interface DefinedFormAPI<FormData, ErrorValue> {
   readonly Form: React.ComponentType<FormProps<FormData, ErrorValue>>;
   readonly Fields: {
     readonly [FieldName in keyof FormData]: React.ComponentType<
       FieldProps<FormData[FieldName], FieldName, FormData, ErrorValue>
     >
   };
-} {
-  const f = Object.keys(fields(createField));
-  const Fields: any = {};
-  f.forEach(name => {
+  readonly FormSpy: React.ComponentType<FormSpyProps<FormData, ErrorValue>>;
+  extend<ExtraFromData>(
+    getFields: GetFields<ExtraFromData>,
+  ): DefinedFormAPI<FormData & ExtraFromData, ErrorValue>;
+}
+export default function defineForm<FormData extends AnyObject, ErrorValue>(
+  getFields: GetFields<FormData>,
+): DefinedFormAPI<FormData, ErrorValue> {
+  return defineFormInner(getFields);
+}
+function defineFormInner<FormData extends AnyObject, ErrorValue>(
+  getFields: any,
+  existingFields: any = {},
+): DefinedFormAPI<FormData, ErrorValue> {
+  const fields = Object.keys(getFields(createField));
+  const Fields: any = existingFields;
+  fields.forEach(name => {
     Fields[name] = (props: any) => (
       <Field
         {...props}
@@ -114,5 +144,12 @@ export default function defineForm<FormData extends AnyObject, ErrorValue>(
       />
     );
   });
-  return {Form: Form as any, Fields};
+  return {
+    Form: Form as any,
+    Fields,
+    FormSpy: FormSpy as any,
+    extend(getFields) {
+      return defineFormInner(getFields, {...Fields});
+    },
+  };
 }

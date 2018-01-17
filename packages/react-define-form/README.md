@@ -70,7 +70,7 @@ const MyForm = () => (
 );
 ```
 
-For full API docs, you can look at [react-final-form](https://github.com/final-form/react-final-form). The API for `Form` and `Fields.SOME_FIELD_NAME` in this module exactly match those of `Form` and `Field` in react-final-form, except that `name` is already set for you and this module does not support parse/format/allowNulls (`null` and `undefined` are not special cased and you should use the empty string directly instead).
+For full API docs, you can look at [react-final-form](https://github.com/final-form/react-final-form). The API for `Form` and `Fields.SOME_FIELD_NAME` in this module exactly match those of `Form`, `Field` and `FormSpy` in react-final-form, except that for `Field`, `name` is already set for you and this module does not support parse/format/allowNulls (`null` and `undefined` are not special cased and you should use the empty string directly instead).
 
 ## License
 
