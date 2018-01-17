@@ -1,0 +1,20 @@
+{
+  "name": "react-define-form",
+  "version": "0.0.0",
+  "description": "",
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
+  "dependencies": {
+    "define-form": "^0.0.0",
+    "react-final-form": "^3.0.3"
+  },
+  "scripts": {
+    "prepublish": "node ../../prebuild react-define-form && tsc -p tsconfig.build.json && node ../../prepare react-define-form"
+  },
+  "repository": "https://github.com/ForbesLindesay/define-form/tree/master/packages/react-define-form",
+  "bugs": "https://github.com/ForbesLindesay/define-form/issues",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  }
+}

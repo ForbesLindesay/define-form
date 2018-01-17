@@ -1,0 +1,17 @@
+{
+  "name": "define-form",
+  "version": "0.0.0",
+  "description": "",
+  "main": "./src/index.js",
+  "types": "./src/index.d.ts",
+  "dependencies": {
+    "@types/node": "^8.0.33",
+    "final-form": "^4.0.1"
+  },
+  "repository": "https://github.com/ForbesLindesay/define-form/tree/master/packages/define-form",
+  "bugs": "https://github.com/ForbesLindesay/define-form/issues",
+  "license": "GPL-3.0",
+  "publishConfig": {
+    "access": "public"
+  }
+}

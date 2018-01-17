@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "define-form": ["packages/define-form/src"],
+      "react-define-form": ["packages/react-define-form/src"]
+    }
+  }
+}
