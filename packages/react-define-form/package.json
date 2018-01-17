@@ -1,11 +1,11 @@
 {
   "name": "react-define-form",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
   "dependencies": {
-    "define-form": "^0.0.1",
+    "define-form": "^0.0.2",
     "react-final-form": "^3.0.3"
   },
   "scripts": {
