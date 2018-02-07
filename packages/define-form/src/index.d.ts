@@ -114,7 +114,7 @@ type GetFieldValidator<
   > = () => FieldValidator<FieldValue, FormData, ErrorValue>;
 
 export interface FieldConfig<FieldValue, FormData, ErrorValue = any> {
-  isEqual?: IsEqual;
+  isEqual?: IsEqual<FieldValue>;
   getValidator?: GetFieldValidator<FieldValue, FormData, ErrorValue>;
   validateFields?: string[];
 }

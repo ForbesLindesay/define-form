@@ -6,6 +6,7 @@ import {
   FormState,
   FormSubscription,
   FieldSubscription,
+  IsEqual,
 } from 'define-form';
 
 const {Form, Field, FormSpy} = require('react-final-form');
@@ -78,6 +79,7 @@ export interface FieldProps<
   FormData extends AnyObject = {},
   ErrorValue = any
 > extends RenderableProps<FieldRenderProps<FieldValue, FieldName, ErrorValue>> {
+  isEqual?: IsEqual<FieldValue>;
   subscription?: FieldSubscription;
   validate?: (value: FieldValue, allValues: FormData) => any;
   value?: FieldValue;
