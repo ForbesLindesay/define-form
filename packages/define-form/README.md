@@ -1,6 +1,6 @@
 # Define Form
 
-Define form offers alternative typescript bindings for [final-form](https://github.com/final-form/final-form). The key difference is that the form data is now a strongly typed object, rather than an any. This make the `initialValues` config option required.
+Define form offers alternative typescript bindings for [final-form](https://github.com/final-form/final-form). The key difference is that the form data is now a strongly typed object, rather than an any. This makes the `initialValues` config option required.
 
 ## Installation
 
