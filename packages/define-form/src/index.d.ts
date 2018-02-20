@@ -12,22 +12,22 @@ export type Subscriber<V> = (value: V) => void;
 export type IsEqual<V = any> = (a: V, b: V) => boolean;
 
 export interface FormSubscription extends Subscription {
-  active: boolean;
-  dirty: boolean;
-  dirtySinceLastSubmit: boolean;
-  error: boolean;
-  errors: boolean;
-  initialValues: boolean;
-  invalid: boolean;
-  pristine: boolean;
-  submitError: boolean;
-  submitErrors: boolean;
-  submitFailed: boolean;
-  submitSucceeded: boolean;
-  submitting: boolean;
-  valid: boolean;
-  validating: boolean;
-  values: boolean;
+  active?: boolean;
+  dirty?: boolean;
+  dirtySinceLastSubmit?: boolean;
+  error?: boolean;
+  errors?: boolean;
+  initialValues?: boolean;
+  invalid?: boolean;
+  pristine?: boolean;
+  submitError?: boolean;
+  submitErrors?: boolean;
+  submitFailed?: boolean;
+  submitSucceeded?: boolean;
+  submitting?: boolean;
+  valid?: boolean;
+  validating?: boolean;
+  values?: boolean;
 }
 
 export interface FormState<FormData extends AnyObject, ErrorValue = any> {
