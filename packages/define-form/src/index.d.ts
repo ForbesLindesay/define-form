@@ -6,7 +6,7 @@ export type Errors<FormData extends AnyObject, ErrorValue> = {
 };
 
 export interface Subscription {
-  [key: string]: boolean;
+  [key: string]: boolean | undefined;
 }
 export type Subscriber<V> = (value: V) => void;
 export type IsEqual<V = any> = (a: V, b: V) => boolean;
@@ -53,7 +53,7 @@ export interface FormState<FormData extends AnyObject, ErrorValue = any> {
 export type FormSubscriber<
   FormData extends AnyObject,
   ErrorValue = any
-  > = Subscriber<FormState<FormData, ErrorValue>>;
+> = Subscriber<FormState<FormData, ErrorValue>>;
 
 export interface FieldState<FieldValue, ErrorValue = any> {
   active?: boolean;
@@ -99,7 +99,7 @@ export interface FieldSubscription extends Subscription {
 
 export type FieldSubscriber<FieldValue, ErrorValue = any> = Subscriber<
   FieldState<FieldValue, ErrorValue>
-  >;
+>;
 
 export type Unsubscribe = () => void;
 
@@ -111,7 +111,7 @@ type GetFieldValidator<
   FieldValue,
   FormData,
   ErrorValue = any
-  > = () => FieldValidator<FieldValue, FormData, ErrorValue>;
+> = () => FieldValidator<FieldValue, FormData, ErrorValue>;
 
 export interface FieldConfig<FieldValue, FormData, ErrorValue = any> {
   isEqual?: IsEqual<FieldValue>;
@@ -174,7 +174,7 @@ export interface FormApi<FormData, ErrorValue = any> {
   initialize: (values: FormData) => void;
   getRegisteredFields: () => string[];
   getState: () => FormState<FormData, ErrorValue>;
-  mutators?: { [key: string]: Function };
+  mutators?: {[key: string]: Function};
   submit: () => Promise<Errors<FormData, ErrorValue> | undefined> | undefined;
   subscribe: (
     subscriber: FormSubscriber<FormData, ErrorValue>,
@@ -194,9 +194,9 @@ export interface MutableState<FormData, ErrorValue = any> {
   fields: {
     [key: string]: {
       [key in keyof FormData]: InternalFieldState<
-      FormData[key],
-      FormData,
-      ErrorValue
+        FormData[key],
+        FormData,
+        ErrorValue
       >
     };
   };
@@ -208,7 +208,7 @@ export type ChangeValue = <
   Key extends keyof FormData,
   FormData,
   ErrorValue = any
-  >(
+>(
   state: MutableState<FormData, ErrorValue>,
   name: Key,
   mutate: (value: FormData[Key]) => FormData[Key],
@@ -229,7 +229,7 @@ export type Mutator<FormData, ErrorValue = any> = (
 export interface Config<FormData, ErrorValue = any> {
   debug?: DebugFunction<FormData, ErrorValue>;
   initialValues: FormData;
-  mutators?: { [key: string]: Mutator<FormData, ErrorValue> };
+  mutators?: {[key: string]: Mutator<FormData, ErrorValue>};
   onSubmit: (
     values: FormData,
     form: FormApi<FormData, ErrorValue>,
