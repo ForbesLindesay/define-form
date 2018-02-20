@@ -5,8 +5,8 @@
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
   "dependencies": {
-    "define-form": "^0.0.2",
-    "react-final-form": "^3.0.3"
+    "define-form": "^1.2.0",
+    "react-final-form": "^3.1.0"
   },
   "scripts": {
     "prepublish": "node ../../prebuild react-define-form && tsc -p tsconfig.build.json && node ../../prepare react-define-form"

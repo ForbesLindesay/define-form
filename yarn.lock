@@ -1669,9 +1669,9 @@ fill-range@^2.1.0:
     repeat-element "^1.1.2"
     repeat-string "^1.5.2"
 
-final-form@^4.0.1:
-  version "4.0.1"
-  resolved "https://registry.yarnpkg.com/final-form/-/final-form-4.0.1.tgz#0e96dea4d00b7ae4dedbcb4587d4f047dd240201"
+final-form@^4.2.0:
+  version "4.2.0"
+  resolved "https://registry.yarnpkg.com/final-form/-/final-form-4.2.0.tgz#8743efbb75933ea3c7d1718b5c5ab9eb23b60026"
 
 find-index@^0.1.1:
   version "0.1.1"
@@ -3277,9 +3277,9 @@ rc@^1.0.1, rc@^1.1.6, rc@^1.1.7:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
-react-final-form@^3.0.3:
-  version "3.0.3"
-  resolved "https://registry.yarnpkg.com/react-final-form/-/react-final-form-3.0.3.tgz#11d3db13f200d9c11c9878f6cbea5691a505bf35"
+react-final-form@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/react-final-form/-/react-final-form-3.1.0.tgz#79711cd54631354981562cac3f924f786be2c232"
 
 react-loadable@^5.3.1:
   version "5.3.1"
