@@ -1,4 +1,4 @@
-import { FieldSpec } from "./createField";
+import {FieldSpec} from './createField';
 
 export type ValueProperty<T> = 
   T extends FieldSpec<infer U, any> ? U : never;

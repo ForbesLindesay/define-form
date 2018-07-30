@@ -1,5 +1,4 @@
 import * as React from 'react';
-import {AnyObject} from 'define-form';
 import FieldProps from './FieldProps';
 import FormProps from './FormProps';
 import FormSpyProps from './FormSpyProps';

@@ -25,7 +25,7 @@ const MyForm = () => (
       const bio: string = values.bio;
       const phone: string = values.phone;
       const age: number = values.age;
-      console.log(values);
+      console.log({name, bio, phone, age});
     }}
     validate={values => {
       return {};
