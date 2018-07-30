@@ -226,16 +226,16 @@ export type Mutator<FormData, ErrorValue = any> = (
   tools: Tools,
 ) => any;
 
-export interface Config<FormData, ErrorValue = any> {
+export interface Config<FormData, FormDataParsed = FormData, ErrorValue = any> {
   debug?: DebugFunction<FormData, ErrorValue>;
   initialValues: FormData;
   mutators?: {[key: string]: Mutator<FormData, ErrorValue>};
   onSubmit: (
-    values: FormData,
+    values: FormDataParsed,
     form: FormApi<FormData, ErrorValue>,
   ) =>
-    | Errors<FormData, ErrorValue>
-    | Promise<Errors<FormData, ErrorValue> | undefined | void>
+    | Errors<FormDataParsed, ErrorValue>
+    | Promise<Errors<FormDataParsed, ErrorValue> | undefined | void>
     | undefined
     | void;
   validate?: (
