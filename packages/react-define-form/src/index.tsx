@@ -1,11 +1,11 @@
 import * as React from 'react';
-import FieldProps from './FieldProps';
-import FormProps from './FormProps';
+import FieldProps, {FieldRenderProps} from './FieldProps';
+import FormProps, {FormRenderProps} from './FormProps';
 import FormSpyProps from './FormSpyProps';
 import createField, {FieldSpec, CreateField} from './createField';
 import {ValueProperty, ParsedValueProperty} from './ExtractType';
 
-export {FieldProps, FormProps, FormSpyProps};
+export {FieldProps, FieldRenderProps, FormProps, FormRenderProps, FormSpyProps};
 
 const {Form, Field, FormSpy} = require('react-final-form');
 

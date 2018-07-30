@@ -2,7 +2,11 @@ import * as React from 'react';
 import {AnyObject, FieldSubscription, IsEqual} from 'define-form';
 import RenderableProps from './RenderableProps';
 
-export interface FieldRenderProps<FieldValue, FieldName, ErrorValue = any> {
+export interface FieldRenderProps<
+  FieldValue,
+  FieldName extends string | number | symbol = string,
+  ErrorValue = any
+> {
   input: {
     name: FieldName;
     onBlur: <T>(event?: React.FocusEvent<T>) => void;
