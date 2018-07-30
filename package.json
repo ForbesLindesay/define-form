@@ -30,7 +30,7 @@
     "prettier": "^1.8.2",
     "rimraf": "^2.6.2",
     "ts-jest": "^21.1.4",
-    "typescript": "^2.5.3"
+    "typescript": "^2.9.2"
   },
   "jest": {
     "transformIgnorePatterns": [

@@ -1,171 +1,71 @@
 import * as React from 'react';
-import {
-  AnyObject,
-  Config,
-  Decorator,
-  FormState,
-  FormSubscription,
-  FieldSubscription,
-  IsEqual,
-} from 'define-form';
+import {AnyObject} from 'define-form';
+import FieldProps from './FieldProps';
+import FormProps from './FormProps';
+import FormSpyProps from './FormSpyProps';
+import createField, {FieldSpec, CreateField} from './createField';
+import {ValueProperty, ParsedValueProperty} from './ExtractType';
+
+export {FieldProps, FormProps, FormSpyProps};
 
 const {Form, Field, FormSpy} = require('react-final-form');
 
-export interface RenderableProps<T> {
-  children?: ((props: T) => React.ReactNode) | React.ReactNode;
-  component?: React.ComponentType<T> | string;
-  render?: (props: T) => React.ReactNode;
-}
-
-// Form Props
-
-export interface SubsetFormApi<FormData extends AnyObject> {
-  batch: (fn: () => void) => void;
-  blur: (name: keyof FormData) => void;
-  change: <TKey extends keyof FormData>(
-    name: keyof FormData,
-    value: FormData[TKey],
-  ) => void;
-  focus: (name: keyof FormData) => void;
-  initialize: (values: Readonly<FormData>) => void;
-  mutators?: {[key: string]: Function};
-  reset: () => void;
-}
-
-export interface FormRenderProps<FormData extends AnyObject, ErrorValue = any>
-  extends FormState<FormData, ErrorValue>,
-    SubsetFormApi<FormData> {
-  batch: (fn: () => void) => void;
-  handleSubmit: (event?: React.SyntheticEvent<HTMLFormElement>) => void;
-}
-export interface FormProps<
-  FormData extends AnyObject,
-  FormDataParsed extends AnyObject,
-  ErrorValue = any
->
-  extends Config<FormData, FormDataParsed, ErrorValue>,
-    RenderableProps<FormRenderProps<FormData, ErrorValue>> {
-  subscription?: FormSubscription;
-  decorators?: Decorator<FormData, ErrorValue>[];
-}
-
-// Field
-
-export interface FieldRenderProps<FieldValue, FieldName, ErrorValue = any> {
-  input: {
-    name: FieldName;
-    onBlur: <T>(event?: React.FocusEvent<T>) => void;
-    onChange: (
-      event: React.ChangeEvent<{value: FieldValue}> | FieldValue,
-    ) => void;
-    onFocus: <T>(event?: React.FocusEvent<T>) => void;
-    value: FieldValue;
-  };
-  meta: Partial<{
-    active: boolean;
-    dirty: boolean;
-    error: ErrorValue;
-    initial: boolean;
-    invalid: boolean;
-    pristine: boolean;
-    submitError: ErrorValue;
-    submitFailed: boolean;
-    submitSucceeded: boolean;
-    touched: boolean;
-    valid: boolean;
-    visited: boolean;
-  }>;
-}
-
-export interface FieldProps<
-  FieldValue,
-  FieldName extends string = string,
-  FormData extends AnyObject = {},
-  ErrorValue = any
-> extends RenderableProps<FieldRenderProps<FieldValue, FieldName, ErrorValue>> {
-  isEqual?: IsEqual<FieldValue>;
-  subscription?: FieldSubscription;
-  validate?: (value: FieldValue, allValues: FormData) => any;
-  value?: FieldValue;
-}
-
-export function createField<FieldValue = string>(): FieldSpec<
-  FieldValue,
-  FieldValue
->;
-export function createField<FieldValue = string, FieldValueParsed = FieldValue>(
-  parse: (value: FieldValue) => FieldValueParsed,
-): FieldSpec<FieldValue, FieldValueParsed>;
-export function createField<FieldValue = string, FieldValueParsed = FieldValue>(
-  parse?: (value: FieldValue) => FieldValueParsed,
-): FieldSpec<FieldValue, FieldValueParsed> {
-  return {parse} as any;
-}
-export type CreateField = typeof createField;
-export declare class FieldSpec<FieldValue, FieldValueParsed> {
-  protected value: FieldValue;
-  protected parsedValue: FieldValueParsed;
-  parse: (value: FieldValue) => FieldValueParsed | undefined;
-}
-
-// FormSpy
-
-export interface FormSpyRenderProps<FormData, ErrorValue>
-  extends FormState<FormData, ErrorValue>,
-    SubsetFormApi<FormData> {}
-
-export interface FormSpyProps<FormData, ErrorValue>
-  extends RenderableProps<FormSpyRenderProps<FormData, ErrorValue>> {
-  onChange?: (formState: FormState<FormData, ErrorValue>) => void;
-  subscription?: FormSubscription;
-}
-
-export type GetFields<FormData, FormDataParsed> = (
+export type FormSpecBase = {[FieldName in string]: FieldSpec<any, any>};
+export type GetFields<FormSpec extends FormSpecBase> = (
   createField: CreateField,
-) => {
-  [FieldName in keyof FormData & keyof FormDataParsed]: FieldSpec<
-    FormData[FieldName],
-    FormDataParsed[FieldName]
-  >
-};
+) => FormSpec;
+
 export type Fields<FormData, ErrorValue> = {
-  readonly [FieldName in string & keyof FormData]: React.ComponentType<
+  readonly [FieldName in keyof FormData]: React.ComponentType<
     FieldProps<FormData[FieldName], FieldName, FormData, ErrorValue>
   >
 };
 export interface DefinedFormAPI<FormData, FormDataParsed, ErrorValue> {
-  readonly Form: React.ComponentType<FormProps<FormData, ErrorValue>>;
+  readonly Form: React.ComponentType<
+    FormProps<FormData, FormDataParsed, ErrorValue>
+  >;
   readonly Fields: {
-    readonly [FieldName in string & keyof FormData]: React.ComponentType<
+    readonly [FieldName in keyof FormData]: React.ComponentType<
       FieldProps<FormData[FieldName], FieldName, FormData, ErrorValue>
     >
   };
   readonly FormSpy: React.ComponentType<FormSpyProps<FormData, ErrorValue>>;
-  extend<ExtraFormData, ExtraFormDataParsed = ExtraFormData>(
-    getFields: GetFields<ExtraFormData, ExtraFormDataParsed>,
+  extend<FormSpec extends FormSpecBase>(
+    getFields: GetFields<FormSpec>,
   ): DefinedFormAPI<
-    FormData & ExtraFormData,
-    FormDataParsed & ExtraFormDataParsed,
+    FormData & {[key in keyof FormSpec]: ValueProperty<FormSpec[key]>},
+    FormDataParsed &
+      {[key in keyof FormSpec]: ParsedValueProperty<FormSpec[key]>},
     ErrorValue
   >;
 }
+
 export default function defineForm<
-  FormData extends AnyObject,
-  ErrorValue,
-  FormDataParsed extends AnyObject = FormData
+  FormSpec extends FormSpecBase,
+  ErrorValue = any
 >(
-  getFields: GetFields<FormData, FormDataParsed>,
-): DefinedFormAPI<FormData, FormDataParsed, ErrorValue> {
-  return defineFormInner(getFields);
+  getFields: GetFields<FormSpec>,
+): DefinedFormAPI<
+  {[key in keyof FormSpec]: ValueProperty<FormSpec[key]>},
+  {[key in keyof FormSpec]: ParsedValueProperty<FormSpec[key]>},
+  ErrorValue
+> {
+  return defineFormInner(getFields, {});
 }
 function defineFormInner<
-  FormData extends AnyObject,
-  FormDataParsed extends AnyObject,
-  ErrorValue
+  FormSpec extends FormSpecBase,
+  FormSpecExtra extends FormSpecBase,
+  ErrorValue = any
 >(
-  getFields: any,
-  existingFields: any = {},
-): DefinedFormAPI<FormData, FormDataParsed, ErrorValue> {
+  getFields: GetFields<FormSpec>,
+  existingFields: FormSpecExtra,
+): DefinedFormAPI<
+  {[key in keyof FormSpec]: ValueProperty<FormSpec[key]>} &
+    {[key in keyof FormSpecExtra]: ValueProperty<FormSpecExtra[key]>},
+  {[key in keyof FormSpec]: ParsedValueProperty<FormSpec[key]>} &
+    {[key in keyof FormSpecExtra]: ParsedValueProperty<FormSpecExtra[key]>},
+  ErrorValue
+> {
   const fieldSpecs = getFields(createField);
   const fields = Object.keys(fieldSpecs);
   const Fields: any = existingFields;
@@ -211,8 +111,8 @@ function defineFormInner<
       />
     ),
     Fields,
-    FormSpy: FormSpy as any,
-    extend(getFields) {
+    FormSpy,
+    extend(getFields): any {
       return defineFormInner(getFields, {...Fields});
     },
   };
